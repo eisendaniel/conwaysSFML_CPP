@@ -13,6 +13,19 @@ int randomN(int depth)
 	r %= depth;
 	return r;
 }
+
+int countNeighbors(std::vector<std::vector<int>> &grid, int i, int j)
+{
+	int sum = 0;
+	for (int k = -1; k < 2; ++k) {
+		for (int l = -1; l < 2; ++l) {
+			sum += grid[i + k][j + l];
+		}
+	}
+	sum -= grid[i][j];
+	return sum;
+}
+
 int main()
 {
 
@@ -54,8 +67,6 @@ int main()
 						break;
 					case 1:
 						cell.setFillColor(sf::Color::Black);
-						cell.setOutlineColor(sf::Color(0, 0, 0, 64));
-						cell.setOutlineThickness(1);
 						break;
 					default:
 						break;
@@ -64,13 +75,7 @@ int main()
 				if (i == 0 || i == dimention - 1 || j == 0 || j == dimention - 1) {
 					nextGen[i][j] = 0;
 				} else {
-					int sum = 0;
-					for (int k = -1; k < 2; ++k) {
-						for (int l = -1; l < 2; ++l) {
-							sum += grid[i + k][j + l];
-						}
-					}
-					sum -= state;
+					int sum = countNeighbors(grid, i, j);
 
 					if (state == 1) {
 						//Any live cell with more than three live neighbours dies, as if by overpopulation.
