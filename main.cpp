@@ -13,7 +13,6 @@ int randomN(int depth)
 	r %= depth;
 	return r;
 }
-
 int main()
 {
 
@@ -61,7 +60,6 @@ int main()
 					default:
 						break;
 				}
-
 				//count neighbors
 				if (i == 0 || i == dimention - 1 || j == 0 || j == dimention - 1) {
 					nextGen[i][j] = 0;
@@ -87,9 +85,9 @@ int main()
 						}
 						//Any dead cell with exactly three live neighbours becomes a live cell, as if by reproduction.
 					} else {
-						if (sum == 3){
+						if (sum == 3) {
 							nextGen[i][j] = 1;
-						} else	nextGen[i][j] = state;
+						} else { nextGen[i][j] = state; }
 					}
 				}
 				window.draw(cell);
