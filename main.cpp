@@ -53,6 +53,7 @@ int main()
 				if (event.key.code == sf::Keyboard::Escape) window.close();
 			}
 		}
+		window.clear(sf::Color::Black);
 
 		for (int i = 0; i < dimention; ++i) {
 			for (int j = 0; j < dimention; ++j) {
