@@ -3,6 +3,10 @@
 #include <SFML/Graphics.hpp>
 #include <unistd.h>
 
+int size = 500;
+float cellSize = 5;
+int dimention = size / cellSize;
+
 int randomN(int depth)
 {
 	int r;
@@ -19,7 +23,9 @@ int countNeighbors(std::vector<std::vector<int>> &grid, int i, int j)
 	int sum = 0;
 	for (int k = -1; k < 2; ++k) {
 		for (int l = -1; l < 2; ++l) {
-			sum += grid[i + k][j + l];
+			int neighborX = (i + k + dimention) % dimention;
+			int neighborY = (j + l + dimention) % dimention;
+			sum += grid[neighborX][neighborY];
 		}
 	}
 	sum -= grid[i][j];
@@ -28,11 +34,6 @@ int countNeighbors(std::vector<std::vector<int>> &grid, int i, int j)
 
 int main()
 {
-
-	int size = 500;
-	float cellSize = 5;
-	const int dimention = size / cellSize;
-
 	std::vector<std::vector<int>> grid;
 	for (int i = 0; i < dimention; ++i) {
 		grid.resize(dimention);
@@ -71,30 +72,26 @@ int main()
 					default:
 						break;
 				}
-				//count neighbors
-				if (i == 0 || i == dimention - 1 || j == 0 || j == dimention - 1) {
-					nextGen[i][j] = 0;
-				} else {
-					int sum = countNeighbors(grid, i, j);
+				int sum = countNeighbors(grid, i, j);
 
-					if (state == 1) {
-						//Any live cell with more than three live neighbours dies, as if by overpopulation.
-						if (sum > 3) {
-							nextGen[i][j] = 0;
-							//Any live cell with two or three live neighbours lives on to the next generation.
-						} else if (sum >= 2) {
-							nextGen[i][j] = 1;
-							//Any live cell with fewer than two live neighbours dies, as if by underpopulation.
-						} else {
-							nextGen[i][j] = 0;
-						}
-						//Any dead cell with exactly three live neighbours becomes a live cell, as if by reproduction.
+				if (state == 1) {
+					//Any live cell with more than three live neighbours dies, as if by overpopulation.
+					if (sum > 3) {
+						nextGen[i][j] = 0;
+						//Any live cell with two or three live neighbours lives on to the next generation.
+					} else if (sum >= 2) {
+						nextGen[i][j] = 1;
+						//Any live cell with fewer than two live neighbours dies, as if by underpopulation.
 					} else {
-						if (sum == 3) {
-							nextGen[i][j] = 1;
-						} else { nextGen[i][j] = state; }
+						nextGen[i][j] = 0;
 					}
+					//Any dead cell with exactly three live neighbours becomes a live cell, as if by reproduction.
+				} else {
+					if (sum == 3) {
+						nextGen[i][j] = 1;
+					} else { nextGen[i][j] = state; }
 				}
+
 				window.draw(cell);
 			}
 		}
