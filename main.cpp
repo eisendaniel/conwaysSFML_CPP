@@ -3,8 +3,8 @@
 #include <SFML/Graphics.hpp>
 #include <unistd.h>
 
-int size = 500;
-float cellSize = 10;
+int size = 1000;
+float cellSize = 5;
 int dimention = size / cellSize;
 bool edit = true;
 
@@ -36,10 +36,10 @@ int countNeighbors(std::vector<std::vector<int>> &grid, int i, int j)
 int main()
 {
 	std::vector<std::vector<int>> grid;
+	grid.resize(dimention);
 	for (int i = 0; i < dimention; ++i) {
-		grid.resize(dimention);
+		grid[i].resize(dimention);
 		for (int j = 0; j < dimention; ++j) {
-			grid[i].resize(dimention);
 			grid[i][j] = (randomN(2));
 		}
 	}
@@ -54,6 +54,9 @@ int main()
 			if (event.type == sf::Event::KeyPressed) {
 				if (event.key.code == sf::Keyboard::Escape) window.close();
 				if (event.key.code == sf::Keyboard::Space) edit = !edit;
+				if (event.key.code == sf::Keyboard::Delete) {
+					grid.assign(grid.size(), std::vector<int>(dimention, 0));
+				}
 			}
 		}
 		window.clear(sf::Color::White);
@@ -80,20 +83,12 @@ int main()
 			for (int j = 0; j < dimention; ++j) {
 				float x = cellSize * j, y = cellSize * i;
 				int state = grid[i][j];
-				sf::RectangleShape cell(sf::Vector2f(cellSize, cellSize));
-				cell.setOutlineThickness(1);
-				cell.setOutlineColor(sf::Color(200,200,200));
-				cell.setPosition(x, y);
-				switch (state) {
-					case 0:
-						cell.setFillColor(sf::Color::White);
-						break;
-					case 1:
-						cell.setFillColor(sf::Color::Black);
-						break;
-					default:
-						break;
+				if (state ==1 ){sf::RectangleShape cell(sf::Vector2f(cellSize, cellSize));
+					cell.setPosition(x, y);
+					cell.setFillColor(sf::Color::Black);
+					window.draw(cell);
 				}
+
 				int sum = countNeighbors(grid, i, j);
 				nextGen[i][j] = state;
 				if (!edit) {
@@ -115,7 +110,6 @@ int main()
 						} else { nextGen[i][j] = state; }
 					}
 				}
-				window.draw(cell);
 			}
 		}
 		window.display();
