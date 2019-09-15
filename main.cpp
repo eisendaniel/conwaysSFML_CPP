@@ -1,8 +1,4 @@
-#include <iostream>
 #include <SFML/Graphics.hpp>
-#include <random>
-#include <ctime>
-#include <functional>
 
 int size = 1000;
 float cellSize = 1;
@@ -54,7 +50,9 @@ int main()
 	std::vector<std::vector<int>> nextGen = grid;
 
 	sf::RenderWindow window(sf::VideoMode(size, size), "Conways");
-	window.setFramerateLimit(60);
+	window.setFramerateLimit(100);
+
+
 	while (window.isOpen()) {
 		sf::Event event = {};
 		while (window.pollEvent(event)) {
@@ -99,6 +97,7 @@ int main()
 					cells.append(sf::Vertex(sf::Vector2f(x+cellSize, y+cellSize), sf::Color::White));
 					cells.append(sf::Vertex(sf::Vector2f(x, y+cellSize), sf::Color::White));
 				}
+
 				int sum = countNeighbors(grid, i, j);
 				nextGen[i][j] = state;
 				if (!edit) {
