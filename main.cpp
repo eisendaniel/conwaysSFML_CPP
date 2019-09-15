@@ -1,14 +1,15 @@
 #include <iostream>
-#include <ctime>
 #include <SFML/Graphics.hpp>
-#include <unistd.h>
+#include <random>
+#include <ctime>
+#include <functional>
 
-int size = 600;
-float cellSize = 3;
+int size = 1000;
+float cellSize = 1;
 int dimention = size / cellSize;
 bool edit = true;
 
-int randomN(int depth)
+int crand(int depth)
 {
 	int r;
 	do {
@@ -40,7 +41,7 @@ std::vector<std::vector<int>> genGrid()
 	for (int i = 0; i < dimention; ++i) {
 		grid[i].resize(dimention);
 		for (int j = 0; j < dimention; ++j) {
-			grid[i][j] = (randomN(2));
+			grid[i][j] = crand(2);
 		}
 	}
 	return grid;
@@ -48,6 +49,7 @@ std::vector<std::vector<int>> genGrid()
 
 int main()
 {
+	sf::VertexArray cells(sf::Quads);
 	std::vector<std::vector<int>> grid = genGrid();
 	std::vector<std::vector<int>> nextGen = grid;
 
@@ -92,12 +94,11 @@ int main()
 				float x = cellSize * j, y = cellSize * i;
 				int state = grid[i][j];
 				if (state == 1) {
-					sf::RectangleShape cell(sf::Vector2f(cellSize, cellSize));
-					cell.setPosition(x, y);
-					cell.setFillColor(sf::Color::White);
-					window.draw(cell);
+					cells.append(sf::Vertex(sf::Vector2f(x, y), sf::Color::White));
+					cells.append(sf::Vertex(sf::Vector2f(x+cellSize, y), sf::Color::White));
+					cells.append(sf::Vertex(sf::Vector2f(x+cellSize, y+cellSize), sf::Color::White));
+					cells.append(sf::Vertex(sf::Vector2f(x, y+cellSize), sf::Color::White));
 				}
-
 				int sum = countNeighbors(grid, i, j);
 				nextGen[i][j] = state;
 				if (!edit) {
@@ -121,6 +122,8 @@ int main()
 				}
 			}
 		}
+		window.draw(cells);
+		cells.clear();
 		window.display();
 		grid = nextGen;
 	}
