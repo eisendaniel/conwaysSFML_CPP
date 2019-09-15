@@ -3,8 +3,8 @@
 #include <SFML/Graphics.hpp>
 #include <unistd.h>
 
-int size = 1000;
-float cellSize = 5;
+int size = 600;
+float cellSize = 3;
 int dimention = size / cellSize;
 bool edit = true;
 
@@ -33,7 +33,7 @@ int countNeighbors(std::vector<std::vector<int>> &grid, int i, int j)
 	return sum;
 }
 
-int main()
+std::vector<std::vector<int>> genGrid()
 {
 	std::vector<std::vector<int>> grid;
 	grid.resize(dimention);
@@ -43,6 +43,12 @@ int main()
 			grid[i][j] = (randomN(2));
 		}
 	}
+	return grid;
+}
+
+int main()
+{
+	std::vector<std::vector<int>> grid = genGrid();
 	std::vector<std::vector<int>> nextGen = grid;
 
 	sf::RenderWindow window(sf::VideoMode(size, size), "Conways");
@@ -57,9 +63,11 @@ int main()
 				if (event.key.code == sf::Keyboard::Delete) {
 					grid.assign(grid.size(), std::vector<int>(dimention, 0));
 				}
+				if (event.key.code == sf::Keyboard::Enter) grid = genGrid();
+
 			}
 		}
-		window.clear(sf::Color::White);
+		window.clear(sf::Color::Black);
 
 		if (sf::Mouse::isButtonPressed(sf::Mouse::Left)) {
 			int x = sf::Mouse::getPosition(window).x;
@@ -83,9 +91,10 @@ int main()
 			for (int j = 0; j < dimention; ++j) {
 				float x = cellSize * j, y = cellSize * i;
 				int state = grid[i][j];
-				if (state ==1 ){sf::RectangleShape cell(sf::Vector2f(cellSize, cellSize));
+				if (state == 1) {
+					sf::RectangleShape cell(sf::Vector2f(cellSize, cellSize));
 					cell.setPosition(x, y);
-					cell.setFillColor(sf::Color::Black);
+					cell.setFillColor(sf::Color::White);
 					window.draw(cell);
 				}
 
