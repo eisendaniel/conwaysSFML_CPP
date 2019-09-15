@@ -1,12 +1,9 @@
 #include <SFML/Graphics.hpp>
 
-int size = 500;
-float cellSize = 10;
+int size = 800;
+float cellSize = 1;
 int dimention = size / cellSize;
 bool pause = false;
-sf::Color cellColor = sf::Color::Black;
-sf::Color backgroudColor = sf::Color::White;
-sf::Color lineColor = sf::Color(200, 200, 200);
 
 int crand(int depth)
 {
@@ -48,20 +45,24 @@ std::vector<std::vector<int>> genGrid()
 
 int main()
 {
-	sf::VertexArray cells(sf::Quads);
-
-	sf::VertexArray lines(sf::Lines);
-	for (int col = 0; col < dimention; ++col) {
-		lines.append(sf::Vertex(sf::Vector2f(0, col * cellSize), lineColor));
-		lines.append(sf::Vertex(sf::Vector2f(size - 1, col * cellSize), lineColor));
-	}
-	for (int row = 0; row < dimention; ++row) {
-		lines.append(sf::Vertex(sf::Vector2f(row * cellSize, 0), lineColor));
-		lines.append(sf::Vertex(sf::Vector2f(row * cellSize, size - 1), lineColor));
-	}
-
 	std::vector<std::vector<int>> grid = genGrid();
 	std::vector<std::vector<int>> nextGen = grid;
+	sf::VertexArray cells(sf::Quads);
+	sf::VertexArray lines(sf::Lines);
+	sf::Color cellColor = sf::Color::Black;
+	sf::Color backgroudColor = sf::Color::White;
+	sf::Color lineColor = sf::Color(200, 200, 200);
+
+	if (cellSize > 2) {
+		for (int col = 0; col < dimention; ++col) {
+			lines.append(sf::Vertex(sf::Vector2f(0, col * cellSize), lineColor));
+			lines.append(sf::Vertex(sf::Vector2f(size - 1, col * cellSize), lineColor));
+		}
+		for (int row = 0; row < dimention; ++row) {
+			lines.append(sf::Vertex(sf::Vector2f(row * cellSize, 0), lineColor));
+			lines.append(sf::Vertex(sf::Vector2f(row * cellSize, size - 1), lineColor));
+		}
+	}
 
 	sf::RenderWindow window(sf::VideoMode(size, size), "Conways");
 	window.setFramerateLimit(100);
@@ -79,6 +80,7 @@ int main()
 				if (event.key.code == sf::Keyboard::Enter) grid = genGrid();
 			}
 		}
+		cells.clear();
 		window.clear(backgroudColor);
 
 		if (sf::Mouse::isButtonPressed(sf::Mouse::Left)) {
@@ -106,8 +108,7 @@ int main()
 				if (state == 1) {
 					cells.append(sf::Vertex(sf::Vector2f(x, y), cellColor));
 					cells.append(sf::Vertex(sf::Vector2f(x + cellSize, y), cellColor));
-					cells.append(sf::Vertex(sf::Vector2f(
-						x + cellSize, y + cellSize), cellColor));
+					cells.append(sf::Vertex(sf::Vector2f(x + cellSize, y + cellSize), cellColor));
 					cells.append(sf::Vertex(sf::Vector2f(x, y + cellSize), cellColor));
 				}
 
@@ -134,9 +135,8 @@ int main()
 				}
 			}
 		}
-		window.draw(cells);
-		cells.clear();
 		window.draw(lines);
+		window.draw(cells);
 		window.display();
 		grid = nextGen;
 	}
