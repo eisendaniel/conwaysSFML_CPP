@@ -1,11 +1,12 @@
 #include <SFML/Graphics.hpp>
+#include <iostream>
 
 typedef std::vector<std::vector<int>> matrix;
 int size = 800;
-float cellSize = 4;
+float cellSize = 1;
 int dimention = size / cellSize;
 bool pause = false;
-int pen = 3;
+int pen = 0;
 
 int crand(int depth)
 {
@@ -44,6 +45,7 @@ matrix genGrid()
 	}
 	return grid;
 }
+
 void draw(matrix &grid, int x, int y, int state)
 {
 	for (int i = -pen; i <= pen; ++i) {
@@ -55,6 +57,10 @@ void draw(matrix &grid, int x, int y, int state)
 
 int main()
 {
+	sf::RenderWindow window(sf::VideoMode(size, size), "Conways", sf::Style::Close);
+	window.setFramerateLimit(60);
+
+	restart:
 	matrix grid = genGrid();
 	matrix nextGen = grid;
 	sf::VertexArray cells(sf::Quads);
@@ -75,28 +81,46 @@ int main()
 		}
 	}
 
-	sf::RenderWindow window(sf::VideoMode(size, size), "Conways", sf::Style::Close);
-	window.setFramerateLimit(60);
-
 	while (window.isOpen()) {
 		sf::Event event = {};
 		while (window.pollEvent(event)) {
-			if (event.type == sf::Event::Closed) window.close();
-			if (event.type == sf::Event::KeyPressed) {
+			if (event.type == sf::Event::Closed) { window.close(); }
+			else if (event.type == sf::Event::KeyPressed) {
 				if (event.key.code == sf::Keyboard::Escape) window.close();
 				if (event.key.code == sf::Keyboard::Space) pause = !pause;
 				if (event.key.code == sf::Keyboard::Enter) grid = genGrid();
 				if (event.key.code == sf::Keyboard::Delete) {
 					grid.assign(grid.size(), std::vector<int>(dimention, 0));
-				}
-				if (event.key.code == sf::Keyboard::Num1) {
+				} else if (event.key.code == sf::Keyboard::LBracket) {
 					cellColor = sf::Color::Black;
 					backgroudColor = sf::Color::White;
-				}
-				if (event.key.code == sf::Keyboard::Num2) {
+				} else if (event.key.code == sf::Keyboard::RBracket) {
 					cellColor = sf::Color::White;
 					backgroudColor = sf::Color::Black;
+				} else if (event.key.code == sf::Keyboard::Num1) {
+					if (cellSize != 1) {
+						cellSize = 1;
+						goto restart;
+					}
+				} else if (event.key.code == sf::Keyboard::Num2) {
+					if (cellSize != 10) {
+						cellSize = 10;
+						goto restart;
+					}
+				} else if (event.key.code == sf::Keyboard::Num3) {
+					if (cellSize != 20) {
+						cellSize = 20;
+						goto restart;
+					}
 				}
+
+			} else if (event.type == sf::Event::MouseWheelScrolled) {
+				int d = pen + event.mouseWheelScroll.delta;
+				if (d <= 0) {
+					pen = 0;
+				} else if (d >= dimention / 4) {
+					pen = dimention / 4;
+				} else { pen = d; }
 			}
 		}
 
