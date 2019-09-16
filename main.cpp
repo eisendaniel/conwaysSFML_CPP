@@ -1,7 +1,8 @@
 #include <SFML/Graphics.hpp>
 
+typedef std::vector<std::vector<int>> matrix;
 int size = 800;
-float cellSize = 1;
+float cellSize = 4;
 int dimention = size / cellSize;
 bool pause = false;
 
@@ -16,7 +17,7 @@ int crand(int depth)
 	return r;
 }
 
-int countNeighbors(std::vector<std::vector<int>> &grid, int i, int j)
+int countNeighbors(matrix &grid, int i, int j)
 {
 	int sum = 0;
 	for (int k = -1; k < 2; ++k) {
@@ -30,9 +31,9 @@ int countNeighbors(std::vector<std::vector<int>> &grid, int i, int j)
 	return sum;
 }
 
-std::vector<std::vector<int>> genGrid()
+matrix genGrid()
 {
-	std::vector<std::vector<int>> grid;
+	matrix grid;
 	grid.resize(dimention);
 	for (int i = 0; i < dimention; ++i) {
 		grid[i].resize(dimention);
@@ -42,16 +43,21 @@ std::vector<std::vector<int>> genGrid()
 	}
 	return grid;
 }
+void draw(matrix &grid, int x, int y, int state)
+{
+	grid[y / cellSize][x / cellSize] = state;
+}
 
 int main()
 {
-	std::vector<std::vector<int>> grid = genGrid();
-	std::vector<std::vector<int>> nextGen = grid;
+	matrix grid = genGrid();
+	matrix nextGen = grid;
 	sf::VertexArray cells(sf::Quads);
 	sf::VertexArray lines(sf::Lines);
+
 	sf::Color cellColor = sf::Color::Black;
 	sf::Color backgroudColor = sf::Color::White;
-	sf::Color lineColor = sf::Color(200, 200, 200);
+	sf::Color lineColor = sf::Color(128, 128, 128, 64);
 
 	if (cellSize > 2) {
 		for (int col = 0; col < dimention; ++col) {
@@ -64,7 +70,7 @@ int main()
 		}
 	}
 
-	sf::RenderWindow window(sf::VideoMode(size, size), "Conways");
+	sf::RenderWindow window(sf::VideoMode(size, size), "Conways", sf::Style::Close);
 	window.setFramerateLimit(100);
 
 	while (window.isOpen()) {
@@ -74,10 +80,17 @@ int main()
 			if (event.type == sf::Event::KeyPressed) {
 				if (event.key.code == sf::Keyboard::Escape) window.close();
 				if (event.key.code == sf::Keyboard::Space) pause = !pause;
+				if (event.key.code == sf::Keyboard::Enter) grid = genGrid();
 				if (event.key.code == sf::Keyboard::Delete) {
 					grid.assign(grid.size(), std::vector<int>(dimention, 0));
 				}
-				if (event.key.code == sf::Keyboard::Enter) grid = genGrid();
+				if (event.key.code == sf::Keyboard::Num1) {
+					cellColor = sf::Color::Black;
+					backgroudColor = sf::Color::White;
+				}if (event.key.code == sf::Keyboard::Num2) {
+					cellColor = sf::Color::White;
+					backgroudColor = sf::Color::Black;
+				}
 			}
 		}
 		cells.clear();
@@ -88,7 +101,7 @@ int main()
 			int y = sf::Mouse::getPosition(window).y;
 
 			if (x < size && y < size && x > 0 && y > 0) {
-				grid[y / cellSize][x / cellSize] = 1;
+				draw(grid, x, y, 1);
 			}
 		}
 
@@ -97,7 +110,7 @@ int main()
 			int y = sf::Mouse::getPosition(window).y;
 
 			if (x < size && y < size && x > 0 && y > 0) {
-				grid[y / cellSize][x / cellSize] = 0;
+				draw(grid, x, y, 0);
 			}
 		}
 
@@ -123,9 +136,7 @@ int main()
 						} else if (sum >= 2) {
 							nextGen[i][j] = 1;
 							//Any live cell with fewer than two live neighbours dies, as if by underpopulation.
-						} else {
-							nextGen[i][j] = 0;
-						}
+						} else { nextGen[i][j] = 0; }
 						//Any dead cell with exactly three live neighbours becomes a live cell, as if by reproduction.
 					} else {
 						if (sum == 3) {
