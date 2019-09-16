@@ -5,6 +5,7 @@ int size = 800;
 float cellSize = 4;
 int dimention = size / cellSize;
 bool pause = false;
+int pen = 3;
 
 int crand(int depth)
 {
@@ -45,7 +46,11 @@ matrix genGrid()
 }
 void draw(matrix &grid, int x, int y, int state)
 {
-	grid[y / cellSize][x / cellSize] = state;
+	for (int i = -pen; i <= pen; ++i) {
+		for (int j = -pen; j <= pen; ++j) {
+			grid[(y + i + dimention) % dimention][(x + j + dimention) % dimention] = state;
+		}
+	}
 }
 
 int main()
@@ -71,7 +76,7 @@ int main()
 	}
 
 	sf::RenderWindow window(sf::VideoMode(size, size), "Conways", sf::Style::Close);
-	window.setFramerateLimit(100);
+	window.setFramerateLimit(60);
 
 	while (window.isOpen()) {
 		sf::Event event = {};
@@ -87,21 +92,20 @@ int main()
 				if (event.key.code == sf::Keyboard::Num1) {
 					cellColor = sf::Color::Black;
 					backgroudColor = sf::Color::White;
-				}if (event.key.code == sf::Keyboard::Num2) {
+				}
+				if (event.key.code == sf::Keyboard::Num2) {
 					cellColor = sf::Color::White;
 					backgroudColor = sf::Color::Black;
 				}
 			}
 		}
-		cells.clear();
-		window.clear(backgroudColor);
 
 		if (sf::Mouse::isButtonPressed(sf::Mouse::Left)) {
 			int x = sf::Mouse::getPosition(window).x;
 			int y = sf::Mouse::getPosition(window).y;
 
 			if (x < size && y < size && x > 0 && y > 0) {
-				draw(grid, x, y, 1);
+				draw(grid, x / cellSize, y / cellSize, 1);
 			}
 		}
 
@@ -110,10 +114,12 @@ int main()
 			int y = sf::Mouse::getPosition(window).y;
 
 			if (x < size && y < size && x > 0 && y > 0) {
-				draw(grid, x, y, 0);
+				draw(grid, x / cellSize, y / cellSize, 0);
 			}
 		}
 
+		cells.clear();
+		window.clear(backgroudColor);
 		for (int i = 0; i < dimention; ++i) {
 			for (int j = 0; j < dimention; ++j) {
 				float x = cellSize * j, y = cellSize * i;
