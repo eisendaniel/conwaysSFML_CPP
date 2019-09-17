@@ -3,7 +3,7 @@
 
 typedef std::vector<std::vector<int>> matrix;
 int size = 800;
-float cellSize = 1;
+float cellSize = 5;
 int dimention = size / cellSize;
 bool pause = false;
 int pen = 0;
@@ -33,7 +33,7 @@ int countNeighbors(matrix &grid, int i, int j)
 	return sum;
 }
 
-matrix genGrid()
+matrix randomStates()
 {
 	matrix grid;
 	grid.resize(dimention);
@@ -57,18 +57,23 @@ void draw(matrix &grid, int x, int y, int state)
 
 int main()
 {
+	/*Setup window and framerate
+	 * init default colors
+	 * */
 	sf::RenderWindow window(sf::VideoMode(size, size), "Conways", sf::Style::Close);
 	window.setFramerateLimit(60);
+	sf::Color cellColor = sf::Color::White;
+	sf::Color backgroudColor = sf::Color::Black;
+	sf::Color lineColor = sf::Color(128, 128, 128, 64);
 
+	//restart and definition point
 	restart:
-	matrix grid = genGrid();
+	dimention = size / cellSize;
+	pen = dimention/50;
+	matrix grid(dimention, std::vector<int>(dimention, 0));
 	matrix nextGen = grid;
 	sf::VertexArray cells(sf::Quads);
 	sf::VertexArray lines(sf::Lines);
-
-	sf::Color cellColor = sf::Color::Black;
-	sf::Color backgroudColor = sf::Color::White;
-	sf::Color lineColor = sf::Color(128, 128, 128, 64);
 
 	if (cellSize > 2) {
 		for (int col = 0; col < dimention; ++col) {
@@ -81,14 +86,14 @@ int main()
 		}
 	}
 
-	while (window.isOpen()) {
+	while (window.isOpen()) { //lifetime of program
 		sf::Event event = {};
 		while (window.pollEvent(event)) {
 			if (event.type == sf::Event::Closed) { window.close(); }
 			else if (event.type == sf::Event::KeyPressed) {
 				if (event.key.code == sf::Keyboard::Escape) window.close();
 				if (event.key.code == sf::Keyboard::Space) pause = !pause;
-				if (event.key.code == sf::Keyboard::Enter) grid = genGrid();
+				if (event.key.code == sf::Keyboard::Enter) grid = randomStates();
 				if (event.key.code == sf::Keyboard::Delete) {
 					grid.assign(grid.size(), std::vector<int>(dimention, 0));
 				} else if (event.key.code == sf::Keyboard::LBracket) {
@@ -103,13 +108,13 @@ int main()
 						goto restart;
 					}
 				} else if (event.key.code == sf::Keyboard::Num2) {
-					if (cellSize != 10) {
-						cellSize = 10;
+					if (cellSize != 5) {
+						cellSize = 5;
 						goto restart;
 					}
 				} else if (event.key.code == sf::Keyboard::Num3) {
-					if (cellSize != 20) {
-						cellSize = 20;
+					if (cellSize != 10) {
+						cellSize = 10;
 						goto restart;
 					}
 				}
@@ -118,8 +123,8 @@ int main()
 				int d = pen + event.mouseWheelScroll.delta;
 				if (d <= 0) {
 					pen = 0;
-				} else if (d >= dimention / 4) {
-					pen = dimention / 4;
+				} else if (d >= dimention / 3) {
+					pen = dimention / 3;
 				} else { pen = d; }
 			}
 		}
@@ -154,7 +159,6 @@ int main()
 					cells.append(sf::Vertex(sf::Vector2f(x + cellSize, y + cellSize), cellColor));
 					cells.append(sf::Vertex(sf::Vector2f(x, y + cellSize), cellColor));
 				}
-
 				int sum = countNeighbors(grid, i, j);
 				nextGen[i][j] = state;
 				if (!pause) {
