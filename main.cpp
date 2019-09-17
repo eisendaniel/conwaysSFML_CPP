@@ -3,8 +3,12 @@
 
 typedef std::vector<std::vector<int>> matrix;
 int size = 800;
+int width = 800;
+int height = 800;
 float cellSize = 5;
 int dimention = size / cellSize;
+int cols = width / cellSize;
+int rows = height / cellSize;
 bool pause = false;
 int pen = 0;
 
@@ -69,20 +73,20 @@ int main()
 	//restart and definition point
 	restart:
 	dimention = size / cellSize;
-	pen = dimention/50;
+	pen = dimention / 50;
 	matrix grid(dimention, std::vector<int>(dimention, 0));
 	matrix nextGen = grid;
 	sf::VertexArray cells(sf::Quads);
 	sf::VertexArray lines(sf::Lines);
 
 	if (cellSize > 2) {
-		for (int col = 0; col < dimention; ++col) {
-			lines.append(sf::Vertex(sf::Vector2f(0, col * cellSize), lineColor));
-			lines.append(sf::Vertex(sf::Vector2f(size - 1, col * cellSize), lineColor));
+		for (int x = 0; x < dimention; ++x) {
+			lines.append(sf::Vertex(sf::Vector2f(0, x * cellSize), lineColor));
+			lines.append(sf::Vertex(sf::Vector2f(size - 1, x * cellSize), lineColor));
 		}
-		for (int row = 0; row < dimention; ++row) {
-			lines.append(sf::Vertex(sf::Vector2f(row * cellSize, 0), lineColor));
-			lines.append(sf::Vertex(sf::Vector2f(row * cellSize, size - 1), lineColor));
+		for (int y = 0; y < dimention; ++y) {
+			lines.append(sf::Vertex(sf::Vector2f(y * cellSize, 0), lineColor));
+			lines.append(sf::Vertex(sf::Vector2f(y * cellSize, size - 1), lineColor));
 		}
 	}
 
@@ -108,11 +112,16 @@ int main()
 						goto restart;
 					}
 				} else if (event.key.code == sf::Keyboard::Num2) {
+					if (cellSize != 2) {
+						cellSize = 2;
+						goto restart;
+					}
+				} else if (event.key.code == sf::Keyboard::Num3) {
 					if (cellSize != 5) {
 						cellSize = 5;
 						goto restart;
 					}
-				} else if (event.key.code == sf::Keyboard::Num3) {
+				} else if (event.key.code == sf::Keyboard::Num4) {
 					if (cellSize != 10) {
 						cellSize = 10;
 						goto restart;
