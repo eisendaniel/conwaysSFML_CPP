@@ -5,10 +5,8 @@ typedef std::vector<std::vector<int>> matrix;
 int size = 800;
 int width = 800;
 int height = 800;
-float cellSize = 5;
+float cellSize = 2;
 int dimention = size / cellSize;
-int cols = width / cellSize;
-int rows = height / cellSize;
 bool pause = false;
 int pen = 0;
 
@@ -64,7 +62,7 @@ int main()
 	/*Setup window and framerate
 	 * init default colors
 	 * */
-	sf::RenderWindow window(sf::VideoMode(size, size), "Conways", sf::Style::Close);
+	sf::RenderWindow window(sf::VideoMode(width, height), "Conways", sf::Style::Close);
 	window.setFramerateLimit(60);
 	sf::Color cellColor = sf::Color::White;
 	sf::Color backgroudColor = sf::Color::Black;
@@ -142,18 +140,14 @@ int main()
 			int x = sf::Mouse::getPosition(window).x;
 			int y = sf::Mouse::getPosition(window).y;
 
-			if (x < size && y < size && x > 0 && y > 0) {
-				draw(grid, x / cellSize, y / cellSize, 1);
-			}
+			draw(grid, x / cellSize, y / cellSize, 1);
 		}
 
 		if (sf::Mouse::isButtonPressed(sf::Mouse::Right)) {
 			int x = sf::Mouse::getPosition(window).x;
 			int y = sf::Mouse::getPosition(window).y;
 
-			if (x < size && y < size && x > 0 && y > 0) {
-				draw(grid, x / cellSize, y / cellSize, 0);
-			}
+			draw(grid, x / cellSize, y / cellSize, 0);
 		}
 
 		cells.clear();
