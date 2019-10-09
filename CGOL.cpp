@@ -2,10 +2,11 @@
 #include <iostream>
 
 typedef std::vector<std::vector<int>> matrix;
+
 int size = 800;
 int width = 800;
 int height = 800;
-float cellSize = 2;
+float cellSize = 1;
 int dimention = size / cellSize;
 bool pause = false;
 int pen = 0;
