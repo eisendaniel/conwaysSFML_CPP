@@ -134,10 +134,14 @@ int main()
 				} else if (d >= dimention / 3) {
 					pen = dimention / 3;
 				} else { pen = d; }
+			} else if (event.type == sf::Event::MouseButtonReleased){
+				window.setMouseCursorVisible(true);
 			}
 		}
 
 		if (sf::Mouse::isButtonPressed(sf::Mouse::Left)) {
+			window.setMouseCursorVisible(false);
+
 			int x = sf::Mouse::getPosition(window).x;
 			int y = sf::Mouse::getPosition(window).y;
 
@@ -151,6 +155,8 @@ int main()
 		}
 
 		if (sf::Mouse::isButtonPressed(sf::Mouse::Right)) {
+			window.setMouseCursorVisible(false);
+
 			int x = sf::Mouse::getPosition(window).x;
 			int y = sf::Mouse::getPosition(window).y;
 
@@ -162,6 +168,8 @@ int main()
 
 			draw(grid, x / cellSize, y / cellSize, 0);
 		}
+
+
 
 		cells.clear();
 		window.clear(backgroudColor);
