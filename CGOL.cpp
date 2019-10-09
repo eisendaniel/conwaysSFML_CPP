@@ -141,12 +141,24 @@ int main()
 			int x = sf::Mouse::getPosition(window).x;
 			int y = sf::Mouse::getPosition(window).y;
 
+			if (x < 0) x = 0;
+			if (y < 0) y = 0;
+			if (x > size) x = size;
+			if (y > size) y = size;
+			sf::Mouse::setPosition(sf::Vector2i(x, y), window);
+
 			draw(grid, x / cellSize, y / cellSize, 1);
 		}
 
 		if (sf::Mouse::isButtonPressed(sf::Mouse::Right)) {
 			int x = sf::Mouse::getPosition(window).x;
 			int y = sf::Mouse::getPosition(window).y;
+
+			if (x < 0) x = 0;
+			if (y < 0) y = 0;
+			if (x > size) x = size;
+			if (y > size) y = size;
+			sf::Mouse::setPosition(sf::Vector2i(x, y), window);
 
 			draw(grid, x / cellSize, y / cellSize, 0);
 		}
