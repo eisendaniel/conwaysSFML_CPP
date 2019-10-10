@@ -2,7 +2,7 @@
 #include <iostream>
 
 typedef std::vector<std::vector<int>> matrix;
-int width = 160, height = 9;
+int width = 1000, height = 700;
 int cellSize = 2;
 int cols, rows;
 bool pause = false;
@@ -19,17 +19,17 @@ int crand(int depth)
 	return r;
 }
 
-int countNeighbors(matrix &grid, int i, int j)
+int countNeighbors(matrix &grid, int row, int col)
 {
 	int sum = 0;
-	for (int k = -1; k < 2; ++k) {
-		for (int l = -1; l < 2; ++l) {
-			int neighborX = (i + k + rows) % rows;
-			int neighborY = (j + l + cols) % cols;
+	for (int i = -1; i < 2; ++i) {
+		for (int j = -1; j < 2; ++j) {
+			int neighborX = (row + i + rows) % rows;
+			int neighborY = (col + j + cols) % cols;
 			sum += grid[neighborX][neighborY];
 		}
 	}
-	sum -= grid[i][j];
+	sum -= grid[row][col];
 	return sum;
 }
 
@@ -57,7 +57,7 @@ void draw(matrix &grid, int x, int y, int state)
 
 int main()
 {
-	/*Setup window and framerate
+	/*Setup window and frame-rate
 	 * init default colors
 	 * */
 	sf::RenderWindow window(sf::VideoMode(width, height), "Conways", sf::Style::Close);
@@ -141,6 +141,9 @@ int main()
 			}
 		}
 
+		cells.clear();
+		window.clear(backgroudColor);
+
 		if (sf::Mouse::isButtonPressed(sf::Mouse::Left)) {
 			int x = sf::Mouse::getPosition(window).x;
 			int y = sf::Mouse::getPosition(window).y;
@@ -167,8 +170,6 @@ int main()
 			draw(grid, x / cellSize, y / cellSize, 0);
 		}
 
-		cells.clear();
-		window.clear(backgroudColor);
 		for (int row = 0; row < rows; ++row) {
 			for (int col = 0; col < cols; ++col) {
 				float x = cellSize * col, y = cellSize * row;
