@@ -2,7 +2,7 @@
 #include <iostream>
 
 typedef std::vector<std::vector<int>> matrix;
-int width = 1000, height = 1000;
+int width = 160, height = 9;
 int cellSize = 2;
 int cols, rows;
 bool pause = false;
@@ -63,6 +63,7 @@ int main()
 	sf::RenderWindow window(sf::VideoMode(width, height), "Conways", sf::Style::Close);
 	window.setFramerateLimit(60);
 	sf::Color cellColor = sf::Color::White;
+	sf::Color brushColor(cellColor.r, cellColor.g, cellColor.b, 64);
 	sf::Color backgroudColor = sf::Color::Black;
 	sf::Color lineColor = sf::Color(128, 128, 128, 64);
 
@@ -197,7 +198,7 @@ int main()
 			}
 		}
 		sf::RectangleShape brush(sf::Vector2f(2 * pen * cellSize, 2 * pen * cellSize));
-		brush.setFillColor(sf::Color(cellColor.r, cellColor.g, cellColor.b, 64));
+		brush.setFillColor(brushColor);
 		brush.setPosition(
 			sf::Mouse::getPosition(window).x - cellSize * pen,
 			sf::Mouse::getPosition(window).y - cellSize * pen);
