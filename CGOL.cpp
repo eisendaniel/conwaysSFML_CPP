@@ -6,7 +6,7 @@ int width = 1920, height = 1080;
 int cellSize = 2;
 int cols, rows;
 bool pause = false;
-int pen = 0;
+int pen;
 
 int crand(int depth)
 {
@@ -191,8 +191,13 @@ int main()
 				}
 			}
 		}
-		window.draw(lines);
+		sf::RectangleShape brush(sf::Vector2f(2*pen*cellSize, 2*pen*cellSize));
+		brush.setFillColor(sf::Color(cellColor.r, cellColor.g, cellColor.b, 64));
+		brush.setPosition(sf::Mouse::getPosition(window).x - cellSize*pen, sf::Mouse::getPosition(window).y - cellSize*pen);
+
 		window.draw(cells);
+		window.draw(lines);
+		window.draw(brush);
 		window.display();
 		grid = nextGen;
 	}
