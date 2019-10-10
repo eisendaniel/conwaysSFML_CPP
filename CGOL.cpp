@@ -2,7 +2,7 @@
 #include <iostream>
 
 typedef std::vector<std::vector<int>> matrix;
-int width = 1920, height = 1080;
+int width = 1000, height = 1000;
 int cellSize = 2;
 int cols, rows;
 bool pause = false;
@@ -60,7 +60,7 @@ int main()
 	/*Setup window and framerate
 	 * init default colors
 	 * */
-	sf::RenderWindow window(sf::VideoMode(width, height), "Conways", sf::Style::Fullscreen);
+	sf::RenderWindow window(sf::VideoMode(width, height), "Conways", sf::Style::Close);
 	window.setFramerateLimit(60);
 	sf::Color cellColor = sf::Color::White;
 	sf::Color backgroudColor = sf::Color::Black;
@@ -132,6 +132,11 @@ int main()
 				} else if (d >= rows / 3) {
 					pen = rows / 3;
 				} else { pen = d; }
+
+			} else if (event.type == sf::Event::MouseButtonPressed) {
+				window.setMouseCursorVisible(false);
+			} else if (event.type == sf::Event::MouseButtonReleased) {
+				window.setMouseCursorVisible(true);
 			}
 		}
 
@@ -191,9 +196,11 @@ int main()
 				}
 			}
 		}
-		sf::RectangleShape brush(sf::Vector2f(2*pen*cellSize, 2*pen*cellSize));
+		sf::RectangleShape brush(sf::Vector2f(2 * pen * cellSize, 2 * pen * cellSize));
 		brush.setFillColor(sf::Color(cellColor.r, cellColor.g, cellColor.b, 64));
-		brush.setPosition(sf::Mouse::getPosition(window).x - cellSize*pen, sf::Mouse::getPosition(window).y - cellSize*pen);
+		brush.setPosition(
+			sf::Mouse::getPosition(window).x - cellSize * pen,
+			sf::Mouse::getPosition(window).y - cellSize * pen);
 
 		window.draw(cells);
 		window.draw(lines);
