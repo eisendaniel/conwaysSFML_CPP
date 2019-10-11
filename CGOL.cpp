@@ -27,10 +27,10 @@ int countNeighbors(matrix &grid, int row, int col)
 		for (int j = -1; j < 2; ++j) {
 			int neighborX = (row + i + rows) % rows;
 			int neighborY = (col + j + cols) % cols;
-			sum += grid[neighborX][neighborY].status();
+			sum += grid[neighborX][neighborY].isAlive();
 		}
 	}
-	sum -= grid[row][col].status();
+	sum -= grid[row][col].isAlive();
 	return sum;
 }
 
@@ -41,7 +41,7 @@ matrix randomStates()
 	for (int y = 0; y < rows; ++y) {
 		grid[y].resize(cols);
 		for (int x = 0; x < cols; ++x) {
-			grid[y][x].update(crand(2));
+			grid[y][x].setAge(crand(2));
 		}
 	}
 	return grid;
@@ -51,7 +51,7 @@ void draw(matrix &grid, int x, int y, int state)
 {
 	for (int i = -pen; i <= pen; ++i) {
 		for (int j = -pen; j <= pen; ++j) {
-			grid[(y + i + rows) % rows][(x + j + cols) % cols].update(state);
+			grid[(y + i + rows) % rows][(x + j + cols) % cols].setAge(state);
 		}
 	}
 }
@@ -63,8 +63,8 @@ int main()
 	 * */
 	sf::RenderWindow window(sf::VideoMode(width, height), "Conways", sf::Style::Close);
 	window.setFramerateLimit(60);
-	sf::Color cellColor = sf::Color::White;
-	sf::Color brushColor(cellColor.r, cellColor.g, cellColor.b, 64);
+	sf::Color cellColor[] = {sf::Color::White, sf::Color::Cyan, sf::Color::Green, sf::Color::Red};
+	sf::Color brushColor(255, 255, 255, 64);
 	sf::Color backgroudColor = sf::Color::Black;
 	sf::Color lineColor = sf::Color(128, 128, 128, 64);
 
@@ -100,10 +100,10 @@ int main()
 				if (event.key.code == sf::Keyboard::Delete) {
 					grid.assign(grid.size(), std::vector<Cell>(cols, Cell()));
 				} else if (event.key.code == sf::Keyboard::LBracket) {
-					cellColor = sf::Color::Black;
+					cellColor[0] = sf::Color::Black;
 					backgroudColor = sf::Color::White;
 				} else if (event.key.code == sf::Keyboard::RBracket) {
-					cellColor = sf::Color::White;
+					cellColor[0] = sf::Color::White;
 					backgroudColor = sf::Color::Black;
 				} else if (event.key.code == sf::Keyboard::Num1) {
 					if (cellSize != 1) {
@@ -175,25 +175,28 @@ int main()
 			for (int col = 0; col < cols; ++col) {
 				float x = cellSize * col, y = cellSize * row;
 				Cell cell = grid[row][col];
-				if (cell.status() == 1) {
-					cells.append(sf::Vertex(sf::Vector2f(x, y), cellColor));
-					cells.append(sf::Vertex(sf::Vector2f(x + cellSize, y), cellColor));
-					cells.append(sf::Vertex(sf::Vector2f(x + cellSize, y + cellSize), cellColor));
-					cells.append(sf::Vertex(sf::Vector2f(x, y + cellSize), cellColor));
+				if (cell.isAlive()) {
+					cells.append(sf::Vertex(sf::Vector2f(x, y), cellColor[cell.getAge()]));
+					cells.append(sf::Vertex(sf::Vector2f(
+						x + cellSize, y), cellColor[cell.getAge()]));
+					cells.append(sf::Vertex(sf::Vector2f(
+						x + cellSize, y + cellSize), cellColor[cell.getAge()]));
+					cells.append(sf::Vertex(sf::Vector2f(x, y
+										+ cellSize), cellColor[cell.getAge()]));
 				}
 				int sum = countNeighbors(grid, row, col);
 				nextGen[row][col] = cell;
 				if (!pause) {
-					if (cell.status() == 1) {
+					if (cell.isAlive()) {
 						//Any live Cell with more than three live neighbours dies, as if by overpopulation.
-						if (sum > 3) { nextGen[row][col].update(0); }
+						if (sum > 3) { nextGen[row][col].kill(); }
 							//Any live Cell with two or three live neighbours lives on to the next generation.
-						else if (sum >= 2) { nextGen[row][col].update(1); }
+						else if (sum >= 2) { nextGen[row][col].grow(); }
 							//Any live Cell with fewer than two live neighbours dies, as if by underpopulation.
-						else { nextGen[row][col].update(0); }
+						else { nextGen[row][col].kill(); }
 						//Any dead Cell with exactly three live neighbours becomes a live Cell, as if by reproduction.
 					} else {
-						if (sum == 3) { nextGen[row][col].update(1); }
+						if (sum == 3) { nextGen[row][col].birth(); }
 					}
 				}
 			}
