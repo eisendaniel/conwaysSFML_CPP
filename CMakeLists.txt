@@ -8,6 +8,6 @@ set(SFML_STATIC_LIBRARIES TRUE)
 set(SFML_DIR D:/lib/SFML/lib/cmake/SFML)
 find_package(SFML COMPONENTS graphics)
 
-add_executable(conways CGOL.cpp)
+add_executable(conways CGOL.cpp Cell.cpp)
 
 target_link_libraries(conways sfml-graphics)
