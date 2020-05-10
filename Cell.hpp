@@ -11,9 +11,11 @@ class Cell {
 	int state;
  public:
 	Cell();
+
 	int getAge();
-	int isAlive();
 	void setAge(int state);
+
+	int isAlive();
 	void birth();
 	void kill();
 	void grow();

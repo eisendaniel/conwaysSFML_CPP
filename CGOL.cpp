@@ -3,7 +3,7 @@
 #include "Cell.hpp"
 
 typedef std::vector<std::vector<Cell>> matrix;
-int width = 500, height = 500;
+int width = 640, height = 360;
 int cellSize = 2;
 int cols, rows;
 bool pause = false;
@@ -63,10 +63,15 @@ int main()
 	 * */
 	sf::RenderWindow window(sf::VideoMode(width, height), "Conways", sf::Style::Close);
 	window.setFramerateLimit(60);
-	sf::Color cellColor[] = {sf::Color::White, sf::Color::Cyan, sf::Color::Green, sf::Color::Red};
+
+	sf::Color one(0, 255, 255, 255);
+	sf::Color two(0, 255, 0, 255);
+	sf::Color three(255, 0, 0, 255);
+
+	sf::Color cellColor[] = {sf::Color::White, one, two, three};
 	sf::Color brushColor(255, 255, 255, 64);
-	sf::Color backgroudColor = sf::Color::Black;
-	sf::Color lineColor = sf::Color(128, 128, 128, 64);
+	sf::Color backgroundColor(32, 32, 32);
+	sf::Color lineColor(128, 128, 128, 64);
 
 	//restart and definition point
 	restart:
@@ -101,10 +106,10 @@ int main()
 					grid.assign(grid.size(), std::vector<Cell>(cols, Cell()));
 				} else if (event.key.code == sf::Keyboard::LBracket) {
 					cellColor[0] = sf::Color::Black;
-					backgroudColor = sf::Color::White;
+					backgroundColor = sf::Color::White;
 				} else if (event.key.code == sf::Keyboard::RBracket) {
 					cellColor[0] = sf::Color::White;
-					backgroudColor = sf::Color::Black;
+					backgroundColor = sf::Color::Black;
 				} else if (event.key.code == sf::Keyboard::Num1) {
 					if (cellSize != 1) {
 						cellSize = 1;
@@ -125,6 +130,11 @@ int main()
 						cellSize = 10;
 						goto restart;
 					}
+				} else if (event.key.code == sf::Keyboard::Num5) {
+					if (cellSize != 20) {
+						cellSize = 20;
+						goto restart;
+					}
 				}
 
 			} else if (event.type == sf::Event::MouseWheelScrolled) {
@@ -143,7 +153,7 @@ int main()
 		}
 
 		cells.clear();
-		window.clear(backgroudColor);
+		window.clear(backgroundColor);
 
 		if (sf::Mouse::isButtonPressed(sf::Mouse::Left)) {
 			int x = sf::Mouse::getPosition(window).x;
@@ -183,6 +193,7 @@ int main()
 						x + cellSize, y + cellSize), cellColor[cell.getAge()]));
 					cells.append(sf::Vertex(sf::Vector2f(x, y
 										+ cellSize), cellColor[cell.getAge()]));
+
 				}
 				int sum = countNeighbors(grid, row, col);
 				nextGen[row][col] = cell;
@@ -201,7 +212,8 @@ int main()
 				}
 			}
 		}
-		sf::RectangleShape brush(sf::Vector2f(2 * pen * cellSize, 2 * pen * cellSize));
+		sf::RectangleShape brush(sf::Vector2f(
+			cellSize + (cellSize * pen * 2), cellSize + (cellSize * pen * 2)));
 		brush.setFillColor(brushColor);
 		brush.setPosition(
 			sf::Mouse::getPosition(window).x - cellSize * pen,

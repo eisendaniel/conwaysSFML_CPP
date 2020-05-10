@@ -32,6 +32,6 @@ void Cell::setAge(int state)
 }
 int Cell::isAlive()
 {
-	if (getAge()) { return 1; }
+	if (getAge() > 0) { return 1; }
 	else { return 0; }
 }
