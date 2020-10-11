@@ -1,3 +1,0 @@
-"C:\Program Files\JetBrains\CLion 2019.1\bin\cmake\win\bin\cmake.exe" -E remove -f CMakeFiles\cellTest.dir/objects.a
-C:\MinGW\bin\ar.exe cr CMakeFiles\cellTest.dir/objects.a @CMakeFiles\cellTest.dir\objects1.rsp
-C:\MinGW\bin\g++.exe  -std=c++14 -Wall -Wextra -O3 -pedantic -g   -Wl,--whole-archive CMakeFiles\cellTest.dir/objects.a -Wl,--no-whole-archive  -o cellTest.exe -Wl,--out-implib,libcellTest.dll.a -Wl,--major-image-version,0,--minor-image-version,0 @CMakeFiles\cellTest.dir\linklibs.rsp

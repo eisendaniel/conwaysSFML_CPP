@@ -1,0 +1,3 @@
+"C:\Program Files\CMake\bin\cmake.exe" -E rm -f CMakeFiles\conways.dir/objects.a
+C:\mingw64\bin\ar.exe cr CMakeFiles\conways.dir/objects.a @CMakeFiles\conways.dir\objects1.rsp
+C:\mingw64\bin\g++.exe  -std=c++14 -Wall -Wextra -O3 -pedantic -g -Wl,--whole-archive CMakeFiles\conways.dir/objects.a -Wl,--no-whole-archive -o conways.exe -Wl,--out-implib,libconways.dll.a -Wl,--major-image-version,0,--minor-image-version,0 @CMakeFiles\conways.dir\linklibs.rsp
