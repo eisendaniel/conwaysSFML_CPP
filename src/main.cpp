@@ -4,7 +4,7 @@
 
 typedef std::vector<std::vector<Cell>> matrix;
 int width = 1000, height = 1000;
-int cellSize = 2;
+int cell_size = 2;
 int cols, rows;
 bool pause = false;
 int pen;
@@ -20,7 +20,7 @@ int crand(int depth)
 	return r;
 }
 
-int countNeighbors(matrix &grid, int row, int col)
+int count_neighbors(matrix &grid, int row, int col)
 {
 	int sum = 0;
 	for (int i = -1; i < 2; ++i)
@@ -29,14 +29,14 @@ int countNeighbors(matrix &grid, int row, int col)
 		{
 			int neighborX = (row + i + rows) % rows;
 			int neighborY = (col + j + cols) % cols;
-			sum += grid[neighborX][neighborY].isAlive();
+			sum += grid[neighborX][neighborY].is_alive();
 		}
 	}
-	sum -= grid[row][col].isAlive();
+	sum -= grid[row][col].is_alive();
 	return sum;
 }
 
-matrix randomStates()
+matrix random_states()
 {
 	matrix grid;
 	grid.resize(rows);
@@ -45,7 +45,7 @@ matrix randomStates()
 		grid[y].resize(cols);
 		for (int x = 0; x < cols; ++x)
 		{
-			grid[y][x].setAge(crand(2));
+			grid[y][x].set_age(crand(2));
 		}
 	}
 	return grid;
@@ -57,7 +57,7 @@ void draw(matrix &grid, int x, int y, int state)
 	{
 		for (int j = -pen; j <= pen; ++j)
 		{
-			grid[(y + i + rows) % rows][(x + j + cols) % cols].setAge(state);
+			grid[(y + i + rows) % rows][(x + j + cols) % cols].set_age(state);
 		}
 	}
 }
@@ -82,27 +82,27 @@ int main()
 
 // restart and definition point
 restart:
-	cols = width / cellSize;
-	rows = height / cellSize;
+	cols = width / cell_size;
+	rows = height / cell_size;
 	pen = rows / 50;
 	matrix grid(rows, std::vector<Cell>(cols, Cell()));
 	matrix nextGen = grid;
 	sf::VertexArray cells(sf::Quads);
 	sf::VertexArray lines(sf::Lines);
 
-	if (cellSize > 2)
+	if (cell_size > 2)
 	{
 		for (int x = 0; x < cols; ++x)
 		{
-			lines.append(sf::Vertex(sf::Vector2f(x * cellSize, 0), lineColor));
+			lines.append(sf::Vertex(sf::Vector2f(x * cell_size, 0), lineColor));
 			lines.append(
-				sf::Vertex(sf::Vector2f(x * cellSize, height - 1), lineColor));
+				sf::Vertex(sf::Vector2f(x * cell_size, height - 1), lineColor));
 		}
 		for (int y = 0; y < rows; ++y)
 		{
-			lines.append(sf::Vertex(sf::Vector2f(0, y * cellSize), lineColor));
+			lines.append(sf::Vertex(sf::Vector2f(0, y * cell_size), lineColor));
 			lines.append(
-				sf::Vertex(sf::Vector2f(width - 1, y * cellSize), lineColor));
+				sf::Vertex(sf::Vector2f(width - 1, y * cell_size), lineColor));
 		}
 	}
 
@@ -122,7 +122,7 @@ restart:
 				if (event.key.code == sf::Keyboard::Space)
 					pause = !pause;
 				if (event.key.code == sf::Keyboard::Enter)
-					grid = randomStates();
+					grid = random_states();
 				if (event.key.code == sf::Keyboard::Delete)
 				{
 					grid.assign(grid.size(), std::vector<Cell>(cols, Cell()));
@@ -139,41 +139,41 @@ restart:
 				}
 				else if (event.key.code == sf::Keyboard::Num1)
 				{
-					if (cellSize != 1)
+					if (cell_size != 1)
 					{
-						cellSize = 1;
+						cell_size = 1;
 						goto restart;
 					}
 				}
 				else if (event.key.code == sf::Keyboard::Num2)
 				{
-					if (cellSize != 2)
+					if (cell_size != 2)
 					{
-						cellSize = 2;
+						cell_size = 2;
 						goto restart;
 					}
 				}
 				else if (event.key.code == sf::Keyboard::Num3)
 				{
-					if (cellSize != 5)
+					if (cell_size != 5)
 					{
-						cellSize = 5;
+						cell_size = 5;
 						goto restart;
 					}
 				}
 				else if (event.key.code == sf::Keyboard::Num4)
 				{
-					if (cellSize != 10)
+					if (cell_size != 10)
 					{
-						cellSize = 10;
+						cell_size = 10;
 						goto restart;
 					}
 				}
 				else if (event.key.code == sf::Keyboard::Num5)
 				{
-					if (cellSize != 20)
+					if (cell_size != 20)
 					{
-						cellSize = 20;
+						cell_size = 20;
 						goto restart;
 					}
 				}
@@ -222,7 +222,7 @@ restart:
 				y = height;
 			sf::Mouse::setPosition(sf::Vector2i(x, y), window);
 
-			draw(grid, x / cellSize, y / cellSize, 1);
+			draw(grid, x / cell_size, y / cell_size, 1);
 		}
 
 		if (sf::Mouse::isButtonPressed(sf::Mouse::Right))
@@ -240,31 +240,31 @@ restart:
 				y = height;
 			sf::Mouse::setPosition(sf::Vector2i(x, y), window);
 
-			draw(grid, x / cellSize, y / cellSize, 0);
+			draw(grid, x / cell_size, y / cell_size, 0);
 		}
 
 		for (int row = 0; row < rows; ++row)
 		{
 			for (int col = 0; col < cols; ++col)
 			{
-				float x = cellSize * col, y = cellSize * row;
+				float x = cell_size * col, y = cell_size * row;
 				Cell cell = grid[row][col];
-				if (cell.isAlive())
+				if (cell.is_alive())
 				{
 					cells.append(
-						sf::Vertex(sf::Vector2f(x, y), cellColor[cell.getAge()]));
-					cells.append(sf::Vertex(sf::Vector2f(x + cellSize, y),
-											cellColor[cell.getAge()]));
-					cells.append(sf::Vertex(sf::Vector2f(x + cellSize, y + cellSize),
-											cellColor[cell.getAge()]));
-					cells.append(sf::Vertex(sf::Vector2f(x, y + cellSize),
-											cellColor[cell.getAge()]));
+						sf::Vertex(sf::Vector2f(x, y), cellColor[cell.get_age()]));
+					cells.append(sf::Vertex(sf::Vector2f(x + cell_size, y),
+											cellColor[cell.get_age()]));
+					cells.append(sf::Vertex(sf::Vector2f(x + cell_size, y + cell_size),
+											cellColor[cell.get_age()]));
+					cells.append(sf::Vertex(sf::Vector2f(x, y + cell_size),
+											cellColor[cell.get_age()]));
 				}
-				int sum = countNeighbors(grid, row, col);
+				int sum = count_neighbors(grid, row, col);
 				nextGen[row][col] = cell;
 				if (!pause)
 				{
-					if (cell.isAlive())
+					if (cell.is_alive())
 					{
 						// Any live Cell with more than three live neighbours dies, as if by
 						// overpopulation.
@@ -289,11 +289,11 @@ restart:
 				}
 			}
 		}
-		sf::RectangleShape brush(sf::Vector2f(cellSize + (cellSize * pen * 2),
-											  cellSize + (cellSize * pen * 2)));
+		sf::RectangleShape brush(sf::Vector2f(cell_size + (cell_size * pen * 2),
+											  cell_size + (cell_size * pen * 2)));
 		brush.setFillColor(brushColor);
-		brush.setPosition(sf::Mouse::getPosition(window).x - cellSize * pen,
-						  sf::Mouse::getPosition(window).y - cellSize * pen);
+		brush.setPosition(sf::Mouse::getPosition(window).x - cell_size * pen,
+						  sf::Mouse::getPosition(window).y - cell_size * pen);
 
 		window.draw(cells);
 		window.draw(lines);

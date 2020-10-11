@@ -7,7 +7,7 @@ Cell::Cell()
 {
 	Cell::state = 0;
 }
-int Cell::getAge()
+int Cell::get_age()
 {
 	return Cell::state;
 }
@@ -21,17 +21,19 @@ void Cell::kill()
 }
 void Cell::grow()
 {
-	if (getAge() >= AGELIMIT) {
+	if (get_age() >= AGELIMIT)
 		return;
-	} else { ++Cell::state; }
-
+	else
+		++Cell::state;
 }
-void Cell::setAge(int state)
+void Cell::set_age(int state)
 {
 	Cell::state = state;
 }
-int Cell::isAlive()
+int Cell::is_alive()
 {
-	if (getAge() > 0) { return 1; }
-	else { return 0; }
+	if (get_age() > 0)
+		return 1;
+	else
+		return 0;
 }

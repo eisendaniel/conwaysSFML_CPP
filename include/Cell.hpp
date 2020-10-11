@@ -12,10 +12,10 @@ class Cell {
  public:
 	Cell();
 
-	int getAge();
-	void setAge(int state);
+	int get_age();
+	void set_age(int state);
 
-	int isAlive();
+	int is_alive();
 	void birth();
 	void kill();
 	void grow();
