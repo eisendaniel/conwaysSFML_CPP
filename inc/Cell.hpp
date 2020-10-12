@@ -6,19 +6,21 @@
 
 #define AGELIMIT 3
 
-class Cell {
- private:
-	int state;
- public:
+class Cell
+{
+public:
 	Cell();
 
-	int get_age();
-	void set_age(int state);
+	int get_age() const;
+	int is_alive() const;
 
-	int is_alive();
+	void set_age(int state);
 	void birth();
 	void kill();
 	void grow();
+
+private:
+	int state;
 };
 
 #endif //_CELL_HPP_

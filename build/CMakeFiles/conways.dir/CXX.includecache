@@ -6,7 +6,7 @@
 
 #IncludeRegexTransform: 
 
-../include/Cell.hpp
+../inc/Cell.hpp
 
 ../lib/SFML/include/SFML/Config.hpp
 TargetConditionals.h
@@ -678,15 +678,15 @@ SFML/Config.hpp
 
 ../lib/SFML/include/SFML/Window/WindowStyle.hpp
 
-C:/Users/danie/projects/c_cpp/conwaysSFML_CPP/src/Cell.cpp
-Cell.hpp
-C:/Users/danie/projects/c_cpp/conwaysSFML_CPP/src/Cell.hpp
-
 C:/Users/danie/projects/c_cpp/conwaysSFML_CPP/src/main.cpp
 Cell.hpp
 C:/Users/danie/projects/c_cpp/conwaysSFML_CPP/src/Cell.hpp
 SFML/Graphics.hpp
 -
 iostream
+-
+sstream
+-
+future
 -
 

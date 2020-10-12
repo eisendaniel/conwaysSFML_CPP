@@ -1,12 +1,12 @@
 [
 {
   "directory": "C:/Users/danie/projects/c_cpp/conwaysSFML_CPP/build",
-  "command": "C:\\mingw64\\bin\\g++.exe -DSFML_STATIC @CMakeFiles/conways.dir/includes_CXX.rsp  -std=c++14 -Wall -Wextra -O3 -pedantic -g -o CMakeFiles\\conways.dir\\src\\main.cpp.obj -c C:\\Users\\danie\\projects\\c_cpp\\conwaysSFML_CPP\\src\\main.cpp",
+  "command": "C:\\mingw64\\bin\\g++.exe -DSFML_STATIC @CMakeFiles/conways.dir/includes_CXX.rsp  -std=c++20 -Wall -Wextra -O3 -pedantic -O3 -DNDEBUG -o CMakeFiles\\conways.dir\\src\\main.cpp.obj -c C:\\Users\\danie\\projects\\c_cpp\\conwaysSFML_CPP\\src\\main.cpp",
   "file": "C:/Users/danie/projects/c_cpp/conwaysSFML_CPP/src/main.cpp"
 },
 {
   "directory": "C:/Users/danie/projects/c_cpp/conwaysSFML_CPP/build",
-  "command": "C:\\mingw64\\bin\\g++.exe -DSFML_STATIC @CMakeFiles/conways.dir/includes_CXX.rsp  -std=c++14 -Wall -Wextra -O3 -pedantic -g -o CMakeFiles\\conways.dir\\src\\Cell.cpp.obj -c C:\\Users\\danie\\projects\\c_cpp\\conwaysSFML_CPP\\src\\Cell.cpp",
+  "command": "C:\\mingw64\\bin\\g++.exe -DSFML_STATIC @CMakeFiles/conways.dir/includes_CXX.rsp  -std=c++20 -Wall -Wextra -O3 -pedantic -O3 -DNDEBUG -o CMakeFiles\\conways.dir\\src\\Cell.cpp.obj -c C:\\Users\\danie\\projects\\c_cpp\\conwaysSFML_CPP\\src\\Cell.cpp",
   "file": "C:/Users/danie/projects/c_cpp/conwaysSFML_CPP/src/Cell.cpp"
 }
 ]

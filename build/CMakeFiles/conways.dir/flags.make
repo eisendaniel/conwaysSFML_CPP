@@ -6,5 +6,5 @@ CXX_DEFINES = -DSFML_STATIC
 
 CXX_INCLUDES = @CMakeFiles/conways.dir/includes_CXX.rsp
 
-CXX_FLAGS =  -std=c++14 -Wall -Wextra -O3 -pedantic -g
+CXX_FLAGS =  -std=c++20 -Wall -Wextra -O3 -pedantic -O3 -DNDEBUG
 

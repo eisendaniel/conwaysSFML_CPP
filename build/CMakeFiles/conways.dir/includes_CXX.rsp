@@ -1,1 +1,1 @@
--IC:/Users/danie/projects/c_cpp/conwaysSFML_CPP/include -isystem C:/Users/danie/projects/c_cpp/conwaysSFML_CPP/lib/SFML/include
+-IC:/Users/danie/projects/c_cpp/conwaysSFML_CPP/inc -isystem C:/Users/danie/projects/c_cpp/conwaysSFML_CPP/lib/SFML/include
