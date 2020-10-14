@@ -8,7 +8,7 @@
 const int WIDTH = 1024, HEIGHT = 1024;
 
 // globals
-int cell_size = 2;
+int cell_size = 20;
 int cols, rows;
 bool pause = false;
 int pen;
@@ -103,6 +103,7 @@ restart:
 	cols = WIDTH / cell_size;
 	rows = HEIGHT / cell_size;
 	pen = rows / 50;
+	float brush_size = cell_size + (cell_size * pen * 2);
 	std::vector<std::vector<Cell>> grid(rows, std::vector<Cell>(cols, Cell()));
 	std::vector<std::vector<Cell>> nextGen = grid;
 	sf::VertexArray cells(sf::Quads);
@@ -224,6 +225,8 @@ restart:
 					pen = rows / 3;
 				else
 					pen = d;
+
+				brush_size = cell_size + (cell_size * pen * 2);
 			}
 			else if (event.type == sf::Event::MouseButtonPressed)
 				window.setMouseCursorVisible(false);
@@ -300,11 +303,10 @@ restart:
 				}
 			}
 		}
-		sf::RectangleShape brush(sf::Vector2f(cell_size + (cell_size * pen * 2),
-											  cell_size + (cell_size * pen * 2)));
+		sf::RectangleShape brush(sf::Vector2f(brush_size, brush_size));
 		brush.setFillColor(brushColor);
-		brush.setPosition(sf::Mouse::getPosition(window).x - cell_size * pen,
-						  sf::Mouse::getPosition(window).y - cell_size * pen);
+		brush.setPosition(sf::Mouse::getPosition(window).x - brush_size / 2.0,
+						  sf::Mouse::getPosition(window).y - brush_size / 2.0);
 
 		window.draw(cells);
 		window.draw(lines);
